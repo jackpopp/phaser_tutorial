@@ -13,11 +13,11 @@ var player;
 
 function preload()
 {
-    game.load.image('background', 'assets/images/background.png');
-    game.load.image('player', 'assets/images/player.png');
-    game.load.image('platform', 'assets/images/platform.png'); 
-    game.load.image('enemy', 'assets/images/enemy.png');
-    game.load.image('bullet', 'assets/images/bullet.png');
+    game.load.image('background', '../assets/images/background.png');
+    game.load.image('player', '../assets/images/player.png');
+    game.load.image('platform', '../assets/images/platform.png'); 
+    game.load.image('enemy', '../assets/images/enemy.png');
+    game.load.image('bullet', '../assets/images/bullet.png');
 }
 
 function create()
