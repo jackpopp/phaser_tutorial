@@ -13,15 +13,17 @@ var player;
 
 function preload()
 {
-    game.load.image('background', 'assets/images/background.png');
-    game.load.image('player', 'assets/images/player.png');
-    game.load.image('platform', 'assets/images/platform.png'); 
-    game.load.image('enemy', 'assets/images/enemy.png');
-    game.load.image('bullet', 'assets/images/bullet.png');
+    game.load.image('background', '../assets/images/background.png');
+    game.load.image('player', '../assets/images/player.png');
+    game.load.image('platform', '../assets/images/platform.png'); 
+    game.load.image('enemy', '../assets/images/enemy.png');
+    game.load.image('bullet', '../assets/images/bullet.png');
 }
 
 function create()
 {
+    game.physics.arcade.gravity.y = 100;
+
     background = game.add.sprite(0, 0, 'background');
     background.height = HEIGHT;
     background.width = WIDTH;
@@ -49,6 +51,7 @@ function createPlatforms()
         platform = platforms.create(p.x, p.y, 'platform');
         platform.width = p.width
         platform.body.immovable = true;
+        platform.body.allowGravity = false;
     }
 
     return platforms;
@@ -58,6 +61,7 @@ function createPlayer()
 {
     player = game.add.sprite(0, 0, 'player');
     game.physics.arcade.enable(player);
+    player.body.collideWorldBounds = true;
 
     return player;
 }
