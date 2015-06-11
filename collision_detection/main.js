@@ -10,6 +10,7 @@ var platformData = [
     {x: 500, y: 200, width: 250}
 ]
 var player;
+var stars;
 
 function preload()
 {
@@ -30,11 +31,16 @@ function create()
     
     platforms = createPlatforms();
     player = createPlayer();
+    stars = createStars();
 }
 
 function update()
 {
     game.physics.arcade.collide(player, platforms);
+    game.physics.arcade.collide(stars, platforms);
+    game.physics.arcade.collide(player, stars, function(p, s){
+        s.destroy()
+    });
     checkKeysDown();
 }
 
@@ -85,4 +91,20 @@ function createPlayer()
     player.body.collideWorldBounds = true;
 
     return player;
+}
+
+function createStars()
+{
+    stars = game.add.group();
+    stars.enableBody = true;
+
+    currentX = 20;
+    while (currentX < WIDTH)
+    {
+        star = stars.create(currentX, 0, 'star');
+        star.body.collideWorldBounds = true;
+        currentX+= 20;
+    }
+
+    return stars;
 }
