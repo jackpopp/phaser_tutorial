@@ -17,7 +17,7 @@ function preload()
     game.load.image('player', '../assets/images/player.png');
     game.load.image('platform', '../assets/images/platform.png'); 
     game.load.image('enemy', '../assets/images/enemy.png');
-    game.load.image('bullet', '../assets/images/bullet.png');
+    game.load.image('star', '../assets/images/star.png');
 }
 
 function create()
