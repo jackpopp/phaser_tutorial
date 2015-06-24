@@ -115,6 +115,7 @@ MainGame.prototype = {
         while (currentX < WIDTH)
         {
             star = stars.create(currentX, 0, 'star');
+            star = stars.create(currentX, HEIGHT - 100, 'star');
             star.body.collideWorldBounds = true;
             currentX += 20;
         }
