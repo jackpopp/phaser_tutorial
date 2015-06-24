@@ -46,7 +46,7 @@ MainGame.prototype = {
     createPlatforms: function()
     {
         // create group
-        platforms = this.game.add.group();
+        var platforms = this.game.add.group();
         // enable physics on the body
         platforms.enableBody = true;
 
@@ -64,12 +64,12 @@ MainGame.prototype = {
 
     createPlayer: function()
     {
-        player = this.game.add.sprite(0, 0, 'player');
+        var player = this.game.add.sprite(0, 0, 'player');
         this.game.physics.arcade.enable(player);
 
         return player;
     }
-}
+};
 
 game.state.add('MainGame', MainGame);
 game.state.start('MainGame');

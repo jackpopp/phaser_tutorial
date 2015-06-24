@@ -1,110 +1,128 @@
 var HEIGHT = 600;
 var WIDTH = 800;
-var game = new Phaser.Game(800, 600, Phaser.AUTO, null, { preload: preload, create: create, update: update });
-var background;
-var platforms;
-var platformData = [
-    {x: 0, y: 570, width: 800},
-    {x: 50, y: 200, width: 250},
-    {x: 325, y: 400, width: 180},
-    {x: 500, y: 200, width: 250}
-]
-var player;
-var stars;
+var game = new Phaser.Game(800, 600, Phaser.AUTO, null);
 
-function preload()
+var MainGame = function(game)
 {
-    game.load.image('background', '../assets/images/background.png');
-    game.load.image('player', '../assets/images/player.png');
-    game.load.image('platform', '../assets/images/platform.png'); 
-    game.load.image('enemy', '../assets/images/enemy.png');
-    game.load.image('star', '../assets/images/star.png');
+    this.game = game;
+    this.platformData = [
+        {x: 0, y: 570, width: 800},
+        {x: 50, y: 200, width: 250},
+        {x: 325, y: 400, width: 180},
+        {x: 500, y: 200, width: 250}
+    ];
+    this.background;
+    this.platforms;
+    this.player;
+    this.stars;
 }
 
-function create()
-{
-    game.physics.arcade.gravity.y = 100;
+MainGame.prototype = {
 
-    background = game.add.sprite(0, 0, 'background');
-    background.height = HEIGHT;
-    background.width = WIDTH;
-    
-    platforms = createPlatforms();
-    player = createPlayer();
-    stars = createStars();
-}
-
-function update()
-{
-    game.physics.arcade.collide(player, platforms);
-    game.physics.arcade.collide(stars, platforms);
-    game.physics.arcade.collide(player, stars, function(p, s){
-        s.destroy()
-    });
-    checkKeysDown();
-}
-
-function checkKeysDown()
-{
-    if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
+    preload: function()
     {
-          player.body.velocity.x = -150;
+        this.game.load.image('background', '../assets/images/background.png');
+        this.game.load.image('player', '../assets/images/player.png');
+        this.game.load.image('platform', '../assets/images/platform.png'); 
+        this.game.load.image('enemy', '../assets/images/enemy.png');
+        this.game.load.image('star', '../assets/images/star.png');
+    },
+
+    create: function()
+    {
+        this.game.physics.arcade.gravity.y = 100;
+
+        background = this.game.add.sprite(0, 0, 'background');
+        background.height = HEIGHT;
+        background.width = WIDTH;
+        
+        this.platforms = this.createPlatforms();
+        this.player = this.createPlayer();
+        this.stars = this.createStars();
+    },
+
+    update: function()
+    {
+        this.game.physics.arcade.collide(this.player, this.platforms);
+        this.game.physics.arcade.collide(this.stars, this.platforms);
+        this.game.physics.arcade.collide(this.player, this.stars, function(p, s) {
+            s.destroy();
+        });
+        this.checkKeysDown();
+    },
+
+    checkKeysDown: function()
+    {
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
+        {
+            this.player.body.velocity.x = -150;
+        }
+        else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
+        {
+             this.player.body.velocity.x = +150;
+        }
+        else if (this.playerIsOnTheGround())
+        {
+             this.player.body.velocity.y = -200;
+        }    
+        else
+        {
+             this.player.body.velocity.x = 0;
+        }
+    },
+
+    createPlatforms: function()
+    {
+        // create group
+        var platforms = this.game.add.group();
+        // enable physics on the body
+        platforms.enableBody = true;
+
+        // add platforms
+        for (i = 0; i < this.platformData.length; i++)
+        {
+            p = this.platformData[i];
+            platform = platforms.create(p.x, p.y, 'platform');
+            platform.width = p.width;
+            platform.body.immovable = true;
+            platform.body.allowGravity = false;
+        }
+
+        return platforms;
+    },
+
+    createPlayer: function()
+    {
+        var player = this.game.add.sprite(0, 0, 'player');
+        this.game.physics.arcade.enable(player);
+        player.body.collideWorldBounds = true;
+
+        return player;
+    },
+
+    playerIsOnTheGround: function()
+    {
+        return this.game.input.keyboard.isDown(Phaser.Keyboard.UP) && 
+            ((this.player.y === (HEIGHT - this.player.height)) || this.player.body.touching.down);
+    },
+
+    createStars: function()
+    {
+        var stars = this.game.add.group();
+        stars.enableBody = true;
+
+        currentX = 20;
+        while (currentX < WIDTH)
+        {
+            star = stars.create(currentX, 0, 'star');
+            star.body.collideWorldBounds = true;
+            currentX += 20;
+        }
+
+        return stars;
     }
-    else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
-    {
-         player.body.velocity.x = +150;
-    }
-    else if (game.input.keyboard.isDown(Phaser.Keyboard.UP) && ((player.y === (HEIGHT - player.height)) || player.body.touching.down))
-    {
-         player.body.velocity.y = -200;
-    }    
-    else
-    {
-         player.body.velocity.x = 0;
-    }
-}
+};
 
-function createPlatforms()
-{
-    // create group
-    platforms = game.add.group();
-    // enable physics on the body
-    platforms.enableBody = true;
+game.state.add('MainGame', MainGame);
+game.state.start('MainGame');
 
-    // add platforms
-    for (i = 0; i < platformData.length; i++)
-    {
-        p = platformData[i];
-        platform = platforms.create(p.x, p.y, 'platform');
-        platform.width = p.width;
-        platform.body.immovable = true;
-        platform.body.allowGravity = false;
-    }
-
-    return platforms;
-}
-
-function createPlayer()
-{
-    player = game.add.sprite(0, 0, 'player');
-    game.physics.arcade.enable(player);
-    player.body.collideWorldBounds = true;
-
-    return player;
-}
-
-function createStars()
-{
-    stars = game.add.group();
-    stars.enableBody = true;
-
-    currentX = 20;
-    while (currentX < WIDTH)
-    {
-        star = stars.create(currentX, 0, 'star');
-        star.body.collideWorldBounds = true;
-        currentX+= 20;
-    }
-
-    return stars;
-}
