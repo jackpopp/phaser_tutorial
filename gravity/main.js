@@ -56,7 +56,7 @@ MainGame.prototype = {
         {
             p = this.platformData[i];
             platform = platforms.create(p.x, p.y, 'platform');
-            platform.width = p.width
+            platform.width = p.width;
             platform.body.immovable = true;
             platform.body.allowGravity = false;
         }
