@@ -22,6 +22,7 @@ function preload()
 
 function create()
 {
+    game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.gravity.y = 100;
 
     background = game.add.sprite(0, 0, 'background');
