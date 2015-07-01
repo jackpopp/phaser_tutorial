@@ -70,18 +70,31 @@ MainGame.prototype = {
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
         {
             this.player.body.velocity.x = -150;
+            this.player.animations.play('walk_left');
+            this.player.direction = -1;
         }
         else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
         {
-             this.player.body.velocity.x = +150;
+            this.player.body.velocity.x = +150;
+            this.player.animations.play('walk_right');
+            this.player.direction = 1;
         }
         else if (this.playerIsOnTheGround())
         {
-             this.player.body.velocity.y = -200;
-        }    
+            this.player.body.velocity.y = -200;
+        }
         else
         {
-             this.player.body.velocity.x = 0;
+            this.player.body.velocity.x = 0;
+
+            if (this.player.direction === -1)
+            {
+               this.player.animations.play('stand_left');
+            }
+            else
+            {
+               this.player.animations.play('stand_right');
+            }
         }
     },
 
@@ -111,10 +124,10 @@ MainGame.prototype = {
         this.game.physics.arcade.enable(player);
         player.body.collideWorldBounds = true;
 
-        player.animations.add('stand_left', [12, 13, 14, 15], 8, true);
-        player.animations.add('stand_right', [0, 1, 2, 3], 8, true);
-        player.animations.add('walk_right', [4, 5, 6, 7], 8, true);
-        player.animations.add('walk_left', [8, 9, 10, 11], 8, true);
+        player.animations.add('stand_left', [12, 13, 14, 15], 6, true);
+        player.animations.add('stand_right', [0, 1, 2, 3], 6, true);
+        player.animations.add('walk_right', [4, 5, 6, 7], 6, true);
+        player.animations.add('walk_left', [8, 9, 10, 11], 6, true);
         
         player.animations.play('stand_right');
 
@@ -163,6 +176,10 @@ MainGame.prototype = {
             enemy.body.collideWorldBounds = true;
             enemy.direction = 1;
             x += 200;
+
+            enemy.animations.add('walk_right', [4, 5, 6, 7], 6, true);
+            enemy.animations.add('walk_left', [8, 9, 10, 11], 6, true);
+            enemy.animations.play('walk_right');
         }
 
         return enemies;
@@ -178,16 +195,19 @@ MainGame.prototype = {
             if (enemy.x >= WIDTH - enemy.width && enemy.direction === 1)
             {
                 enemy.direction = -1;
+                enemy.animations.play('walk_left');
             }
 
             if (enemy.x <= 0 && enemy.direction === -1)
             {
                 enemy.direction = 1;
+                enemy.animations.play('walk_right');
             }
 
             enemy.x += enemy.direction;
         }
     }
+
 };
 
 game.state.add('MainGame', MainGame);
