@@ -24,9 +24,9 @@ MainGame.prototype = {
     preload: function()
     {
         this.game.load.image('background', '../assets/images/background.png');
-        this.game.load.image('player', '../assets/images/player.png');
+        game.load.spritesheet('player', '../assets/images/player_spritesheet.png', 22, 35);
         this.game.load.image('platform', '../assets/images/platform.png'); 
-        this.game.load.image('enemy', '../assets/images/enemy.png');
+        game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet.png', 22, 35);
         this.game.load.image('star', '../assets/images/star.png');
     },
 
@@ -110,6 +110,13 @@ MainGame.prototype = {
         var player = this.game.add.sprite(0, 0, 'player');
         this.game.physics.arcade.enable(player);
         player.body.collideWorldBounds = true;
+
+        player.animations.add('stand_left', [12, 13, 14, 15], 8, true);
+        player.animations.add('stand_right', [0, 1, 2, 3], 8, true);
+        player.animations.add('walk_right', [4, 5, 6, 7], 8, true);
+        player.animations.add('walk_left', [8, 9, 10, 11], 8, true);
+        
+        player.animations.play('stand_right');
 
         return player;
     },
