@@ -18,6 +18,7 @@ var MainGame = function(game)
     this.enemies;
     this.enemyAmount = 2;
     this.sounds = {};
+    this.volume = 0.5;
 };
 
 MainGame.prototype = {
@@ -50,14 +51,7 @@ MainGame.prototype = {
         this.player = this.createPlayer();
         this.stars = this.createStars();
         this.enemies = this.createEnemies();
-
-        this.sounds['jump'] = this.game.add.audio('jump', 0.5);
-        this.sounds['land'] = this.game.add.audio('land', 0.5);
-        this.sounds['pickup'] = this.game.add.audio('pickup', 0.5);
-        this.sounds['die'] = this.game.add.audio('die', 0.5);
-        this.sounds['die'].onStop.add(function() {
-            this.game.paused = true;
-        }.bind(this));
+        this.registerSounds();
     },
 
     update: function()
@@ -243,7 +237,21 @@ MainGame.prototype = {
 
             enemy.x += enemy.direction;
         }
+    },
+
+    registerSounds: function()
+    {
+        this.sounds['theme'] = this.game.add.sound('theme', this.volume);
+        this.sounds['jump'] = this.game.add.sound('jump', this.volume);
+        this.sounds['land'] = this.game.add.sound('land', this.volume);
+        this.sounds['pickup'] = this.game.add.sound('pickup', this.volume);
+        this.sounds['die'] = this.game.add.sound('die', this.volume);
+        this.sounds['die'].onStop.add(function() {
+            this.game.paused = true;
+        }.bind(this));
     }
+
+    
 
 };
 
