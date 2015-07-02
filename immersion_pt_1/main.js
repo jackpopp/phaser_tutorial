@@ -24,9 +24,9 @@ MainGame.prototype = {
     preload: function()
     {
         this.game.load.image('background', '../assets/images/background.png');
-        game.load.spritesheet('player', '../assets/images/player_spritesheet.png', 22, 35);
+        this.game.load.spritesheet('player', '../assets/images/player_spritesheet.png', 22, 35);
         this.game.load.image('platform', '../assets/images/platform.png'); 
-        game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet.png', 22, 35);
+        this.game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet.png', 22, 35);
         this.game.load.image('star', '../assets/images/star.png');
     },
 

@@ -17,6 +17,7 @@ var MainGame = function(game)
     this.stars;
     this.enemies;
     this.enemyAmount = 2;
+    this.sounds = {};
 }
 
 MainGame.prototype = {
@@ -24,10 +25,15 @@ MainGame.prototype = {
     preload: function()
     {
         this.game.load.image('background', '../assets/images/background.png');
-        game.load.spritesheet('player', '../assets/images/player_spritesheet.png', 22, 35);
         this.game.load.image('platform', '../assets/images/platform.png'); 
-        game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet.png', 22, 35);
         this.game.load.image('star', '../assets/images/star.png');
+
+        this.game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet.png', 22, 35);
+        this.game.load.spritesheet('player', '../assets/images/player_spritesheet.png', 22, 35);
+
+        game.load.audio('jump', ['../assets/audio/jump.wav']);
+        game.load.audio('land', ['../assets/audio/land.wav']);
+        game.load.audio('pickup', ['../assets/audio/pickup.wav']);
     },
 
     create: function()
@@ -42,11 +48,21 @@ MainGame.prototype = {
         this.player = this.createPlayer();
         this.stars = this.createStars();
         this.enemies = this.createEnemies();
+
+        this.sounds['jump'] = this.game.add.audio('jump', 0.5);
+        this.sounds['land'] = this.game.add.audio('land', 0.5);
+        this.sounds['pickup'] = this.game.add.audio('pickup', 0.5);
     },
 
     update: function()
     {
-        this.game.physics.arcade.collide(this.player, this.platforms);
+        this.game.physics.arcade.collide(this.player, this.platforms, function() {
+            if (this.player.landed === false)
+            {
+                this.player.landed = true;
+                this.sounds['land'].play();
+            }
+        }.bind(this));
 
         this.game.physics.arcade.collide(this.stars, this.platforms, function(star) {
             this.tweenStar(star);
@@ -55,7 +71,8 @@ MainGame.prototype = {
         this.game.physics.arcade.collide(this.enemies, this.platforms);
         this.game.physics.arcade.collide(this.player, this.stars, function(p, s) {
             s.destroy();
-        });
+            this.sounds['pickup'].play();
+        }.bind(this));
 
         this.game.physics.arcade.collide(this.player, this.enemies, function(p) {
             p.kill();
@@ -82,6 +99,8 @@ MainGame.prototype = {
         else if (this.playerIsOnTheGround())
         {
             this.player.body.velocity.y = -200;
+            this.player.landed = false;
+            this.sounds['jump'].play()
         }
         else
         {
@@ -130,6 +149,8 @@ MainGame.prototype = {
         player.animations.add('walk_left', [8, 9, 10, 11], 6, true);
         
         player.animations.play('stand_right');
+
+        player.landed = false;
 
         return player;
     },
