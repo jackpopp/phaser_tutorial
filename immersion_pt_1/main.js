@@ -61,6 +61,12 @@ MainGame.prototype = {
             p.kill();
             this.game.paused = true;
         }.bind(this));
+
+        this.game.physics.arcade.collide(this.enemies, this.player, function(e, p) {
+            p.kill();
+            this.game.paused = true;
+        }.bind(this));
+
         this.checkKeysDown();
         this.moveEnemies();
     },
