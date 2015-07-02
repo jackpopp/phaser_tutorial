@@ -18,7 +18,7 @@ var MainGame = function(game)
     this.enemies;
     this.enemyAmount = 2;
     this.sounds = {};
-}
+};
 
 MainGame.prototype = {
 
@@ -34,6 +34,8 @@ MainGame.prototype = {
         game.load.audio('jump', ['../assets/audio/jump.wav']);
         game.load.audio('land', ['../assets/audio/land.wav']);
         game.load.audio('pickup', ['../assets/audio/pickup.wav']);
+        game.load.audio('die', ['../assets/audio/die.wav']);
+        game.load.audio('theme', ['../assets/audio/theme.mp3']);
     },
 
     create: function()
@@ -52,6 +54,10 @@ MainGame.prototype = {
         this.sounds['jump'] = this.game.add.audio('jump', 0.5);
         this.sounds['land'] = this.game.add.audio('land', 0.5);
         this.sounds['pickup'] = this.game.add.audio('pickup', 0.5);
+        this.sounds['die'] = this.game.add.audio('die', 0.5);
+        this.sounds['die'].onStop.add(function() {
+            this.game.paused = true;
+        }.bind(this));
     },
 
     update: function()
@@ -76,8 +82,15 @@ MainGame.prototype = {
 
         this.game.physics.arcade.collide(this.player, this.enemies, function(p) {
             p.kill();
-            this.game.paused = true;
+            this.sounds['die'].play();
         }.bind(this));
+
+        this.game.physics.arcade.collide(this.enemies, this.player, function(e, p) {
+            p.kill();
+            this.sounds['die'].play();
+        }.bind(this));
+
+
         this.checkKeysDown();
         this.moveEnemies();
 
