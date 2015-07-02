@@ -57,7 +57,7 @@ MainGame.prototype = {
     update: function()
     {
         this.game.physics.arcade.collide(this.player, this.platforms, function() {
-            if (this.player.landed === false)
+            if (this.player.landed === false && this.player.body.touching.down)
             {
                 this.player.landed = true;
                 this.sounds['land'].play();
@@ -80,6 +80,9 @@ MainGame.prototype = {
         }.bind(this));
         this.checkKeysDown();
         this.moveEnemies();
+
+        if (! this.player.body.touching.down)
+            this.player.landed = false;
     },
 
     checkKeysDown: function()
