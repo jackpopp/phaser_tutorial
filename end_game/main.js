@@ -1,6 +1,7 @@
 var HEIGHT = 600;
 var WIDTH = 800;
 var WORLD_BOUNDS = 1300;
+var MAX_TIME = 5;
 var game = new Phaser.Game(800, 600, Phaser.AUTO, null);
 
 var MainGame = function(game)
@@ -24,7 +25,10 @@ var MainGame = function(game)
     this.volume = 0.5;
 
     this.starCount = 0;
+
     this.startTextCount = null;
+    this.timeLeft = MAX_TIME;
+    this.startTime = null;
 };
 
 MainGame.prototype = {
@@ -64,7 +68,9 @@ MainGame.prototype = {
 
         this.game.world.setBounds(0, 0, WORLD_BOUNDS, HEIGHT);
         this.game.camera.follow(this.player);
-        this.createStarText();
+
+        this.startTime = new Date().getTime();
+        this.createText();
     },
 
     update: function()
@@ -105,7 +111,15 @@ MainGame.prototype = {
         if (! this.player.body.touching.down)
             this.player.landed = false;
 
-        this.renderStarCountText();
+        this.timeLeft = MAX_TIME - ((new Date().getTime() - this.startTime) / 1000);
+
+        if (this.timeLeft <= 0) {
+            this.timeLeft = 0;
+            this.renderText();
+            this.game.paused = true;
+        }
+
+        this.renderText();
     },
 
     checkKeysDown: function()
@@ -267,18 +281,24 @@ MainGame.prototype = {
         }.bind(this));
     },
 
-    createStarText: function() {
-        this.startTextCount = game.add.text(10, 10, "", { font: "14px Arial", fill: "#000000", align: "right" });
+    createText: function() 
+    {
+        this.startTextCount = game.add.text(10, 10, "", { font: "14px Arial", fill: "#000000", align: "left" });
         this.startTextCount.fixedToCamera = true;
         this.startTextCount.cameraOffset.setTo(10, 10);
-        this.renderStarCountText();
+
+        this.countDownText = game.add.text(WIDTH - 100, 10, "", { font: "14px Arial", fill: "#000000", align: "right" });
+        this.countDownText.fixedToCamera = true;
+        this.countDownText.cameraOffset.setTo(WIDTH - 100, 10);
+
+        this.renderText();
     },
 
-    renderStarCountText: function() {
+    renderText: function() 
+    {
         this.startTextCount.setText("Star Count: "+this.starCount);
+        this.countDownText.setText(this.timeLeft.toFixed(1)+" seconds");
     }
-
-    
 
 };
 
