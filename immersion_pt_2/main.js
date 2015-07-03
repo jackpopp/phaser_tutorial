@@ -52,6 +52,9 @@ MainGame.prototype = {
         this.stars = this.createStars();
         this.enemies = this.createEnemies();
         this.registerSounds();
+
+        this.sounds['theme'].loop = true;
+        this.sounds['theme'].play();
     },
 
     update: function()
@@ -241,7 +244,7 @@ MainGame.prototype = {
 
     registerSounds: function()
     {
-        this.sounds['theme'] = this.game.add.sound('theme', this.volume);
+        this.sounds['theme'] = this.game.add.sound('theme', this.volume - 0.1);
         this.sounds['jump'] = this.game.add.sound('jump', this.volume);
         this.sounds['land'] = this.game.add.sound('land', this.volume);
         this.sounds['pickup'] = this.game.add.sound('pickup', this.volume);
