@@ -22,7 +22,7 @@ var MainGame = function(game)
     this.enemies;
     this.enemyAmount = 2;
     this.sounds = {};
-    this.volume = 0.5;
+    this.volume = 0;
 
     this.starCount = 0;
 
@@ -41,7 +41,7 @@ MainGame.prototype = {
         this.game.load.image('platform_floor', '../assets/images/platform_floor.png'); 
         this.game.load.image('star', '../assets/images/star.png');
         this.game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet.png', 22, 35);
-        this.game.load.spritesheet('player', '../assets/images/player_spritesheet.png', 22, 35);
+        this.game.load.spritesheet('player', '../assets/images/enemy_spritesheet_one.png', 79, 74);
 
         game.load.audio('jump', ['../assets/audio/jump.wav']);
         game.load.audio('land', ['../assets/audio/land.wav']);
@@ -184,8 +184,8 @@ MainGame.prototype = {
         this.game.physics.arcade.enable(player);
         player.body.collideWorldBounds = true;
 
-        player.animations.add('stand_left', [12, 13, 14, 15], 6, true);
-        player.animations.add('stand_right', [0, 1, 2, 3], 6, true);
+        player.animations.add('stand_left', [12, 13, 14, 15], 3, true);
+        player.animations.add('stand_right', [0, 1, 2, 3], 3, true);
         player.animations.add('walk_right', [4, 5, 6, 7], 6, true);
         player.animations.add('walk_left', [8, 9, 10, 11], 6, true);
         
@@ -272,7 +272,7 @@ MainGame.prototype = {
 
     registerSounds: function()
     {
-        this.sounds['theme'] = this.game.add.sound('theme', this.volume - 0.1);
+        this.sounds['theme'] = this.game.add.sound('theme', this.volume);
         this.sounds['jump'] = this.game.add.sound('jump', this.volume);
         this.sounds['land'] = this.game.add.sound('land', this.volume);
         this.sounds['pickup'] = this.game.add.sound('pickup', this.volume);
