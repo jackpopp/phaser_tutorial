@@ -7,12 +7,12 @@ var MainGame = function(game)
 {
     this.game = game;
     this.platformData = [
-        {x: 0, y: 570, width: WORLD_BOUNDS},
-        {x: 50, y: 200, width: 250},
-        {x: 325, y: 400, width: 180},
-        {x: 500, y: 200, width: 250},
-        {x: 825, y: 400, width: 180},
-        {x: 1100, y: 200, width: 200}
+        {x: 0, y: 570, width: WORLD_BOUNDS, sprite: 'platform_floor'},
+        {x: 50, y: 200, width: 240, sprite: 'platform_large'},
+        {x: 325, y: 400, width: 160, sprite: 'platform_small'},
+        {x: 500, y: 200, width: 240, sprite: 'platform_large'},
+        {x: 825, y: 400, width: 160, sprite: 'platform_small'},
+        {x: 1100, y: 200, width: 200, sprite: 'platform_large'}
     ];
     this.background;
     this.platforms;
@@ -29,9 +29,10 @@ MainGame.prototype = {
     preload: function()
     {
         this.game.load.image('background', '../assets/images/background.png');
-        this.game.load.image('platform', '../assets/images/platform.png'); 
+        this.game.load.image('platform_small', '../assets/images/platform_small.png'); 
+        this.game.load.image('platform_large', '../assets/images/platform_large.png'); 
+        this.game.load.image('platform_floor', '../assets/images/platform_floor.png'); 
         this.game.load.image('star', '../assets/images/star.png');
-
         this.game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet.png', 22, 35);
         this.game.load.spritesheet('player', '../assets/images/player_spritesheet.png', 22, 35);
 
@@ -147,7 +148,7 @@ MainGame.prototype = {
         for (i = 0; i < this.platformData.length; i++)
         {
             p = this.platformData[i];
-            platform = platforms.create(p.x, p.y, 'platform');
+            platform = platforms.create(p.x, p.y, p.sprite);
             platform.width = p.width;
             platform.body.immovable = true;
             platform.body.allowGravity = false;
