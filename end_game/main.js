@@ -1,7 +1,7 @@
 var HEIGHT = 600;
 var WIDTH = 800;
 var WORLD_BOUNDS = 1300;
-var MAX_TIME = 30;
+var MAX_TIME = 180;
 var game = new Phaser.Game(800, 600, Phaser.AUTO, null);
 
 var MainGame = function(game)
@@ -40,8 +40,8 @@ MainGame.prototype = {
         this.game.load.image('platform_large', '../assets/images/platform_large.png'); 
         this.game.load.image('platform_floor', '../assets/images/platform_floor.png'); 
         this.game.load.image('star', '../assets/images/star.png');
-        this.game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet.png', 22, 35);
-        this.game.load.spritesheet('player', '../assets/images/enemy_spritesheet_one.png', 79, 74);
+        this.game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet_one.png', 79, 74);
+        this.game.load.spritesheet('player', '../assets/images/player_spritesheet_three.png', 79, 83);
 
         game.load.audio('jump', ['../assets/audio/jump.wav']);
         game.load.audio('land', ['../assets/audio/land.wav']);
@@ -184,8 +184,8 @@ MainGame.prototype = {
         this.game.physics.arcade.enable(player);
         player.body.collideWorldBounds = true;
 
-        player.animations.add('stand_left', [12, 13, 14, 15], 3, true);
-        player.animations.add('stand_right', [0, 1, 2, 3], 3, true);
+        player.animations.add('stand_left', [12, 13, 14, 15], 4, true);
+        player.animations.add('stand_right', [0, 1, 2, 3], 4, true);
         player.animations.add('walk_right', [4, 5, 6, 7], 6, true);
         player.animations.add('walk_left', [8, 9, 10, 11], 6, true);
         
