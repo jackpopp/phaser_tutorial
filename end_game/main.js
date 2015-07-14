@@ -29,6 +29,19 @@ var MainGame = function(game)
     this.startTextCount = null;
     this.timeLeft = MAX_TIME;
     this.startTime = null;
+
+    self = this;
+    WebFontConfig = {
+        active: function() {
+            game.time.events.add(Phaser.Timer.SECOND, function() {
+                this.createText();
+            }.bind(self));
+        },
+
+        google: {
+            families: ['Delius Unicase']
+        }
+    };
 };
 
 MainGame.prototype = {
@@ -40,14 +53,16 @@ MainGame.prototype = {
         this.game.load.image('platform_large', '../assets/images/platform_large.png'); 
         this.game.load.image('platform_floor', '../assets/images/platform_floor.png'); 
         this.game.load.image('star', '../assets/images/star.png');
-        this.game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet_one.png', 79, 74);
-        this.game.load.spritesheet('player', '../assets/images/player_spritesheet_three.png', 79, 83);
+        this.game.load.spritesheet('enemy', '../assets/images/enemy_spritesheet.png', 79.0625, 74);
+        this.game.load.spritesheet('player', '../assets/images/player_spritesheet.png', 79, 83);
 
         game.load.audio('jump', ['../assets/audio/jump.wav']);
         game.load.audio('land', ['../assets/audio/land.wav']);
         game.load.audio('pickup', ['../assets/audio/pickup.wav']);
         game.load.audio('die', ['../assets/audio/die.wav']);
         game.load.audio('theme', ['../assets/audio/theme.mp3']);
+
+        game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     },
 
     create: function()
@@ -71,7 +86,7 @@ MainGame.prototype = {
         this.game.camera.follow(this.player);
 
         this.startTime = new Date().getTime();
-        this.createText();
+        //this.createText();
     },
 
     update: function()
@@ -284,21 +299,24 @@ MainGame.prototype = {
 
     createText: function() 
     {
-        this.startTextCount = game.add.text(10, 10, "", { font: "14px Arial", fill: "#000000", align: "left" });
+        this.startTextCount = game.add.text(10, 10, "", { font: "700 18px Delius Unicase", fill: "rgb(24, 24, 107)", align: "left" });
         this.startTextCount.fixedToCamera = true;
         this.startTextCount.cameraOffset.setTo(10, 10);
 
-        this.countDownText = game.add.text(WIDTH - 100, 10, "", { font: "14px Arial", fill: "#000000", align: "right" });
+        this.countDownText = game.add.text(WIDTH - 100, 10, "", { font: "700 18px Delius Unicase", fill: "rgb(24, 24, 107)", align: "right"  });
         this.countDownText.fixedToCamera = true;
-        this.countDownText.cameraOffset.setTo(WIDTH - 100, 10);
+        this.countDownText.cameraOffset.setTo(WIDTH - 160, 10);
 
         this.renderText();
     },
 
     renderText: function() 
     {
-        this.startTextCount.setText("Star Count: "+this.starCount);
-        this.countDownText.setText(this.timeLeft.toFixed(1)+" seconds");
+        if (this.startTextCount != null)
+        {
+            this.startTextCount.setText("Star Count: "+this.starCount);
+            this.countDownText.setText(this.timeLeft.toFixed(1)+" seconds");
+        }
     }
 
 };
