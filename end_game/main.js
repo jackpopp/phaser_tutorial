@@ -25,7 +25,6 @@ var MainGame = function(game)
     this.volume = 0;
 
     this.starCount = 0;
-
     this.startTextCount = null;
     this.timeLeft = MAX_TIME;
     this.startTime = null;
@@ -304,15 +303,13 @@ MainGame.prototype = {
 
     createText: function() 
     {
-        this.startTextCount = game.add.text(10, 10, "", { font: "400 18px Chewy", fill: "rgb(24, 24, 107)", align: "left" });
+        this.startTextCount = game.add.text(0, 0, this.starCount, { font: "400 18px Chewy", fill: "rgb(24, 24, 107)", align: "left" });
         this.startTextCount.fixedToCamera = true;
         this.startTextCount.cameraOffset.setTo(10, 10);
 
         this.countDownText = game.add.text(WIDTH - 100, 10, "", { font: "400 18px Chewy", fill: "rgb(24, 24, 107)", align: "right"  });
         this.countDownText.fixedToCamera = true;
         this.countDownText.cameraOffset.setTo(WIDTH - 160, 10);
-
-        this.renderText();
     },
 
     renderText: function() 
