@@ -177,11 +177,11 @@ MainGame.prototype = {
 
             if (enemy.direction === 1)
             {
-                enemy.body.velocity.x = 50;
+                enemy.body.velocity.x = 100;
             }
             else
             {
-                enemy.body.velocity.x = -50;
+                enemy.body.velocity.x = -100;
             }
         }
     }
