@@ -175,7 +175,14 @@ MainGame.prototype = {
                 enemy.direction = 1;
             }
 
-            enemy.x += enemy.direction;
+            if (enemy.direction === 1)
+            {
+                enemy.body.velocity.x = 50;
+            }
+            else
+            {
+                enemy.body.velocity.x = -50;
+            }
         }
     }
 };

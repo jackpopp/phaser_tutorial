@@ -39,7 +39,7 @@ var MainGame = function(game)
         },
 
         google: {
-            families: ['Delius Unicase']
+            families: ['Chewy']
         }
     };
 };
@@ -86,7 +86,6 @@ MainGame.prototype = {
         this.game.camera.follow(this.player);
 
         this.startTime = new Date().getTime();
-        //this.createText();
     },
 
     update: function()
@@ -119,7 +118,6 @@ MainGame.prototype = {
             p.kill();
             this.sounds['die'].play();
         }.bind(this));
-
 
         this.checkKeysDown();
         this.moveEnemies();
@@ -281,7 +279,14 @@ MainGame.prototype = {
                 enemy.animations.play('walk_right');
             }
 
-            enemy.x += enemy.direction;
+            if (enemy.direction === 1)
+            {
+                enemy.body.velocity.x = 50;
+            }
+            else 
+            {
+                enemy.body.velocity.x = -50;
+            }
         }
     },
 
@@ -299,11 +304,11 @@ MainGame.prototype = {
 
     createText: function() 
     {
-        this.startTextCount = game.add.text(10, 10, "", { font: "700 18px Delius Unicase", fill: "rgb(24, 24, 107)", align: "left" });
+        this.startTextCount = game.add.text(10, 10, "", { font: "400 18px Chewy", fill: "rgb(24, 24, 107)", align: "left" });
         this.startTextCount.fixedToCamera = true;
         this.startTextCount.cameraOffset.setTo(10, 10);
 
-        this.countDownText = game.add.text(WIDTH - 100, 10, "", { font: "700 18px Delius Unicase", fill: "rgb(24, 24, 107)", align: "right"  });
+        this.countDownText = game.add.text(WIDTH - 100, 10, "", { font: "400 18px Chewy", fill: "rgb(24, 24, 107)", align: "right"  });
         this.countDownText.fixedToCamera = true;
         this.countDownText.cameraOffset.setTo(WIDTH - 160, 10);
 

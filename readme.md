@@ -12,3 +12,7 @@ Here is a list of the blog sections and the correct directory for the source cod
 + Gravity: falling and stopping - **gravity**
 + Collision Detection Pt 1
 + Collision Detection Pt 2
++ Immersion Pt 1
++ Immersion Pt 2
++ Long Game
++ End Game
