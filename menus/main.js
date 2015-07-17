@@ -329,5 +329,54 @@ MainGame.prototype = {
 
 };
 
+var StartMenu = function(game)
+{
+
+    this.game = game;
+
+}
+
+StartMenu.prototype = {
+
+    preload: function(){
+
+    },
+
+    create: function(){
+        game.state.start('MainGame');
+    },
+
+    update: function(){
+        
+    }
+
+}
+
+var EndMenu = function(game)
+{
+
+    this.game = game;
+
+}
+
+EndMenu.prototype = {
+
+    preload: function(){
+
+    },
+
+    create: function(){
+
+    },
+
+    update: function(){
+        
+    }
+
+}
+
+game.state.add('StartMenu', StartMenu);
 game.state.add('MainGame', MainGame);
-game.state.start('MainGame');
+game.state.add('EndMenu', EndMenu);
+
+game.state.start('StartMenu');
