@@ -2,6 +2,7 @@ var HEIGHT = 600;
 var WIDTH = 800;
 var WORLD_BOUNDS = 1300;
 var MAX_TIME = 60;
+var VOLUME = 0.5
 var game = new Phaser.Game(800, 600, Phaser.AUTO, null);
 
 var MainGame = function(game)
@@ -22,7 +23,7 @@ var MainGame = function(game)
     this.enemies;
     this.enemyAmount = 2;
     this.sounds = {};
-    this.volume = 0;
+    this.volume = 0.5;
 
     this.starCount = 0;
     this.startTextCount = null;
@@ -323,7 +324,7 @@ MainGame.prototype = {
         if (this.timeLeft <= 0) {
             this.timeLeft = 0;
             this.renderText();
-            this.game.paused = true;
+            this.game.state.start('StartMenu');
         }
     }
 
@@ -338,45 +339,64 @@ var StartMenu = function(game)
 
 StartMenu.prototype = {
 
-    preload: function(){
+    mountainTile: null,
+    hillTile: null,
+    cloudsTile: null,
+    buttonSound: null,
 
+    preload: function()
+    {
+        this.game.load.spritesheet('button', '../assets/images/button_sprite.png', 190, 49);
+        this.game.load.image('background_plain', '../assets/images/background_plain.png');
+        this.game.load.image('mountain', '../assets/images/mountain.png');
+        this.game.load.image('hill', '../assets/images/platform_extra_large.png');
+        this.game.load.image('clouds', '../assets/images/clouds2.png');
+        this.game.load.audio('button', ['../assets/audio/button.wav']);
     },
 
-    create: function(){
-        game.state.start('MainGame');
+    create: function()
+    {
+        this.game.stage.backgroundColor = '#d0f4f7'
+        this.game.add.sprite(0, 0, 'background_plain');
+        this.mountainTile = this.game.add.tileSprite(0, 250, 800, 336, 'mountain');
+        this.hillTile = this.game.add.tileSprite(0, 570, 800, 30, 'hill');
+        this.cloudsTile = this.game.add.tileSprite(0, 40, 800, 300, 'clouds');
+
+        this.buttonSound = this.game.add.sound('button', VOLUME);
+
+        button = this.game.add.button(this.game.world.centerX - 95, 450, 'button', function(){ this.startGame() }, this, 0, 1, 2);
+        button.onInputOver.add(function(){ this.overButton() }, this);
+        button.onInputOut.add(function(){ this.offButton() }, this);
+
+        text = this.game.add.text(this.game.world.centerX - 57, 462, "START GAME", { font: "400 18px arial", fill: "#fff" });
     },
 
-    update: function(){
-        
-    }
-
-}
-
-var EndMenu = function(game)
-{
-
-    this.game = game;
-
-}
-
-EndMenu.prototype = {
-
-    preload: function(){
-
+    update: function()
+    {
+        this.mountainTile.tilePosition.x -= 0.5;  
+        this.hillTile.tilePosition.x -= 0.7; 
+        this.cloudsTile.tilePosition.x -= 0.3;   
     },
 
-    create: function(){
-
+    overButton: function()
+    {
+        text.y = text.y + 3;
+        this.buttonSound.play();
     },
 
-    update: function(){
-        
+    offButton: function()
+    {
+        text.y = text.y-3;
+    },
+
+    startGame: function()
+    {
+        this.game.state.start('MainGame');
     }
 
 }
 
 game.state.add('StartMenu', StartMenu);
 game.state.add('MainGame', MainGame);
-game.state.add('EndMenu', EndMenu);
 
 game.state.start('StartMenu');
