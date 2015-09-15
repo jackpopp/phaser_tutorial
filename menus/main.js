@@ -110,13 +110,11 @@ MainGame.prototype = {
         }.bind(this));
 
         this.game.physics.arcade.collide(this.player, this.enemies, function(p) {
-            p.kill();
-            this.sounds['die'].play();
+            this.endGame(p);
         }.bind(this));
 
         this.game.physics.arcade.collide(this.enemies, this.player, function(e, p) {
-            p.kill();
-            this.sounds['die'].play();
+            this.endGame(p);
         }.bind(this));
 
         this.checkKeysDown();
@@ -292,9 +290,6 @@ MainGame.prototype = {
         this.sounds['land'] = this.game.add.sound('land', this.volume);
         this.sounds['pickup'] = this.game.add.sound('pickup', this.volume);
         this.sounds['die'] = this.game.add.sound('die', this.volume);
-        this.sounds['die'].onStop.add(function() {
-            this.game.paused = true;
-        }.bind(this));
     },
 
     createText: function() 
@@ -326,15 +321,24 @@ MainGame.prototype = {
             this.renderText();
             this.game.state.start('StartMenu');
         }
+    },
+
+    endGame: function(p)
+    {
+        this.sounds['die'].play();
+        p.kill();
+
+        setTimeout(function() {
+            this.sounds['theme'].pause();
+            this.game.state.start('StartMenu', true, false, this.starCount);
+        }.bind(this), 500);
     }
 
 };
 
 var StartMenu = function(game)
 {
-
     this.game = game;
-
 }
 
 StartMenu.prototype = {
@@ -343,6 +347,15 @@ StartMenu.prototype = {
     hillTile: null,
     cloudsTile: null,
     buttonSound: null,
+    score: null,
+
+    init: function(score) {
+
+        if (score !== undefined)
+        {
+            this.score = score;
+        }
+    },
 
     preload: function()
     {
@@ -364,11 +377,18 @@ StartMenu.prototype = {
 
         this.buttonSound = this.game.add.sound('button', VOLUME);
 
-        button = this.game.add.button(this.game.world.centerX - 95, 450, 'button', function(){ this.startGame() }, this, 0, 1, 2);
+        button = this.game.add.button((this.game.camera.x + (WIDTH/2)) - 95, 450, 'button', function(){ this.startGame() }, this, 0, 1, 2);
         button.onInputOver.add(function(){ this.overButton() }, this);
         button.onInputOut.add(function(){ this.offButton() }, this);
 
-        text = this.game.add.text(this.game.world.centerX - 57, 462, "START GAME", { font: "400 18px arial", fill: "#fff" });
+        if (this.score)
+        {
+            text = this.game.add.text((this.game.camera.x + (WIDTH/2)) - 70, 462, "RESTART GAME", { font: "400 18px arial", fill: "#fff" });
+        }
+        else 
+        {
+            text = this.game.add.text((this.game.camera.x + (WIDTH/2)) - 57, 462, "START GAME", { font: "400 18px arial", fill: "#fff" });
+        }
     },
 
     update: function()
