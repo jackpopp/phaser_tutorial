@@ -319,7 +319,8 @@ MainGame.prototype = {
         if (this.timeLeft <= 0) {
             this.timeLeft = 0;
             this.renderText();
-            this.game.state.start('StartMenu');
+            this.sounds['theme'].pause();
+            this.game.state.start('Menu');
         }
     },
 
@@ -330,18 +331,18 @@ MainGame.prototype = {
 
         setTimeout(function() {
             this.sounds['theme'].pause();
-            this.game.state.start('StartMenu', true, false, this.starCount);
+            this.game.state.start('Menu', true, false, this.starCount);
         }.bind(this), 500);
     }
 
 };
 
-var StartMenu = function(game)
+var Menu = function(game)
 {
     this.game = game;
 }
 
-StartMenu.prototype = {
+Menu.prototype = {
 
     mountainTile: null,
     hillTile: null,
@@ -383,11 +384,12 @@ StartMenu.prototype = {
 
         if (this.score)
         {
-            text = this.game.add.text((this.game.camera.x + (WIDTH/2)) - 70, 462, "RESTART GAME", { font: "400 18px arial", fill: "#fff" });
+            this.game.add.text((this.game.camera.x + (WIDTH/2)) - 110, 262, "You collected "+this.score+" stars", { font: "400 28px Chewy", fill: "rgb(24, 24, 107)", align: "left" });
+            this.game.add.text((this.game.camera.x + (WIDTH/2)) - 70, 462, "RESTART GAME", { font: "400 18px arial", fill: "#fff" });
         }
         else 
         {
-            text = this.game.add.text((this.game.camera.x + (WIDTH/2)) - 57, 462, "START GAME", { font: "400 18px arial", fill: "#fff" });
+            this.game.add.text((this.game.camera.x + (WIDTH/2)) - 57, 462, "START GAME", { font: "400 18px arial", fill: "#fff" });
         }
     },
 
@@ -416,7 +418,7 @@ StartMenu.prototype = {
 
 }
 
-game.state.add('StartMenu', StartMenu);
+game.state.add('Menu', Menu);
 game.state.add('MainGame', MainGame);
 
-game.state.start('StartMenu');
+game.state.start('Menu');
